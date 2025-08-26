@@ -8,6 +8,15 @@ export class RpcCustomExceptionFilter implements ExceptionFilter {
     const response = ctx.getContext();
     const logger = new Logger('RpcCustomExceptionFilter');
     const rpcError = exception.getError();
+
+    if (rpcError.toString().includes('ECONNREFUSED')) {
+      logger.log(rpcError.toString());
+      return response.status(500).json({
+        status : 500,
+        message : rpcError.toString().substring(0 , rpcError.toString().indexOf('(')-1),
+
+      })
+    }
     if (typeof rpcError === 'object' && 'status' in rpcError && 'message' in rpcError ) {
       const status = rpcError.status;
       return response.status(status).json(rpcError);
