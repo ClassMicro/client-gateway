@@ -9,7 +9,7 @@ export class RpcCustomExceptionFilter implements ExceptionFilter {
     const logger = new Logger('RpcCustomExceptionFilter');
     const rpcError = exception.getError();
 
-    if (rpcError.toString().includes('ECONNREFUSED')) {
+    if (rpcError.toString().includes('empty response')) {
       logger.log(rpcError.toString());
       return response.status(500).json({
         status : 500,
